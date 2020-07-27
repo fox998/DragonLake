@@ -7,13 +7,15 @@
 #include "DragonLernCharacter.h"
 #include "DralonLernActorComponent.h"
 #include "SpeedBuffComponent.h"
+#include "DecreaseSpeedBuffComponent.h"
 
 
+template<typename SpeedBuffComponent = USpeedBuffComponent>
 struct SpeedEfect : public PickableEfectBase
 {
 	void ApplyEfect(OverlapParams const& prams) override
 	{
-		USpeedBuffComponent* component = prams.OtherActor->FindComponentByClass<USpeedBuffComponent>();
+		SpeedBuffComponent* component = prams.OtherActor->FindComponentByClass<SpeedBuffComponent>();
 
 		if (component)
 		{
@@ -21,7 +23,7 @@ struct SpeedEfect : public PickableEfectBase
 		}
 		else
 		{
-			component = NewObject<USpeedBuffComponent>(prams.OtherActor, USpeedBuffComponent::StaticClass());
+			component = NewObject<SpeedBuffComponent>(prams.OtherActor, SpeedBuffComponent::StaticClass());
 			component->RegisterComponent();
 			prams.OtherActor->AddOwnedComponent(component);
 		}
@@ -69,7 +71,8 @@ PickableEfectBase* getEfectFromEnum(ItemEfectType efectType)
 	static const std::unordered_map<ItemEfectType, std::function<PickableEfectBase* (void)>> mapper = {
 		{ItemEfectType::Heal, newItem<HealEfect>},
 		{ItemEfectType::Damage, newItem<DamageEfect>},
-		{ItemEfectType::Speed, newItem<SpeedEfect>}
+		{ItemEfectType::IncreaseSpeed, newItem<SpeedEfect<USpeedBuffComponent>>},
+		{ItemEfectType::DecreaseSpeed, newItem<SpeedEfect<UDecreaseSpeedBuffComponent>>}
 	};
 
 	auto efectIter = mapper.find(efectType);
@@ -82,7 +85,8 @@ FColor getColorFromEfectType(ItemEfectType efect)
 	static const std::unordered_map<ItemEfectType, FColor> colorMapper = {
 		{ItemEfectType::Heal, FColor::Green},
 		{ItemEfectType::Damage, FColor::Red},
-		{ItemEfectType::Speed, FColor::Blue}
+		{ItemEfectType::IncreaseSpeed, FColor::Blue},
+		{ItemEfectType::DecreaseSpeed, FColor::Yellow}
 	};
 
 	auto colorIter = colorMapper.find(efect);
@@ -98,7 +102,7 @@ void UPickableItemBuilder::AsamblePickableItem(APickableItem* asablingBase, Item
 
 ItemEfectType UPickableItemBuilder::GetRandomEfect()
 {
-	return ItemEfectType::Speed;// static_cast<ItemEfectType>(FMath::RandRange(0, (int32)ItemEfectType::COUNT - 1));
+	return ItemEfectType::DecreaseSpeed;// static_cast<ItemEfectType>(FMath::RandRange(0, (int32)ItemEfectType::COUNT - 1));
 }
 
 

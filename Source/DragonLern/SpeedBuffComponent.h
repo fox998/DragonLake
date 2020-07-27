@@ -21,5 +21,5 @@ public:
 	void ChengeSpeed(float deltaSpeed);
 
 	UPROPERTY()
-	float _SpeedDelta = 5;
+	float _SpeedDelta;
 };

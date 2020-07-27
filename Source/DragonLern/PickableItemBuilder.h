@@ -13,7 +13,8 @@ enum ItemEfectType
 {
 	Heal,
 	Damage,
-	Speed,
+	IncreaseSpeed,
+	DecreaseSpeed,
 	COUNT
 };
 
