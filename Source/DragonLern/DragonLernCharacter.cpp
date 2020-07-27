@@ -9,6 +9,7 @@
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "DralonLernActorComponent.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 //////////////////////////////////////////////////////////////////////////
 // ADragonLernCharacter
@@ -47,13 +48,25 @@ ADragonLernCharacter::ADragonLernCharacter()
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
 
-	//auto* NewComponent = CreateDefaultSubobject<UDralonLernActorComponent>(TEXT("YourComponentName"));//NewObject<UDralonLernActorComponent>(this, FName("DamageComponent"));
-	////check(NewComponent);
-	//
-	//AddOwnedComponent(NewComponent);
-	////NewComponent->;
-
+	ResetHP();
 }
+
+void ADragonLernCharacter::ResetHP()
+{
+	_HP = _MaxHP;
+}
+
+void ADragonLernCharacter::HPDeltaChange(int32 hpDelta)
+{
+	_HP += hpDelta;
+	_HP = FMath::Clamp(_HP, 0, _MaxHP);
+
+	if (_HP <= 0)
+	{
+		UKismetSystemLibrary::QuitGame(GetWorld(), Cast<APlayerController>(GetController()), EQuitPreference::Quit, false);
+	}
+}
+
 
 //////////////////////////////////////////////////////////////////////////
 // Input

@@ -4,32 +4,30 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "DralonLernActorComponent.generated.h"
+#include "BuffComponent.generated.h"
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class DRAGONLERN_API UDralonLernActorComponent : public UActorComponent
+class DRAGONLERN_API UBuffComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:	
 	// Sets default values for this component's properties
-	UDralonLernActorComponent();
+	UBuffComponent();
 
+	virtual void IncriaseBuffTime(float upTime);
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+	
+	virtual void OnActivateEfect() { };
+	virtual void OnDeactivateEfect() { };
 
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	UPROPERTY(EditDefaultsOnly)
-	float _damageFrequency = 1;
-
-	UPROPERTY(EditAnywhere)
-	float _damage = 10;
-private:
-	class ADragonLernCharacter* _dragonLernCharacterOwner = nullptr;
+	
+	float _efectTime;
 };

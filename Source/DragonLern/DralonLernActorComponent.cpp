@@ -11,29 +11,23 @@ UDralonLernActorComponent::UDralonLernActorComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 	PrimaryComponentTick.TickInterval = _damageFrequency;
-	
-	//if (GetOwner()->IsA<ADragonLernCharacter>())
-	//{
-	//	auto character = static_cast<ADragonLernCharacter>(GetOwner());
-	//	character->GetController()->Is;
-
-	//}
-	//else
-	//{
-	//	ASSERT(false);
-	//}
-	//// ...
 }
 
+
+void UDralonLernActorComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+	_dragonLernCharacterOwner = nullptr;
+}
 
 // Called when the game starts
 void UDralonLernActorComponent::BeginPlay()
 {
-
 	Super::BeginPlay();
-
-	// ...
-	
+	if (GetOwner()->IsA<ADragonLernCharacter>())
+	{
+		_dragonLernCharacterOwner = Cast<ADragonLernCharacter>(GetOwner());
+	}	
 }
 
 
@@ -41,7 +35,11 @@ void UDralonLernActorComponent::BeginPlay()
 void UDralonLernActorComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("UDralonLernActorComponent::TickComponent")));
-	// ...
+	
+	if (_dragonLernCharacterOwner)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 0.5f, FColor::Green, FString::Printf(TEXT("UDralonLernActorComponent::TickComponent do damage")));
+		_dragonLernCharacterOwner->HPDeltaChange(-_damage);
+	}
 }
 

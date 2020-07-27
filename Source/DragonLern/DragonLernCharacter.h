@@ -2,6 +2,7 @@
 
 #pragma once
 
+
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "DragonLernCharacter.generated.h"
@@ -28,6 +29,22 @@ public:
 	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseLookUpRate;
+
+	UPROPERTY(EditAnywhere)
+	int32 _MaxHP = 100;
+
+	UFUNCTION()
+	void HPDeltaChange(int32 hpDelta);
+
+	UFUNCTION()
+	void ResetHP();
+
+	UFUNCTION()
+	int32 GetHP() const { return _HP; }
+
+private:
+
+	int32 _HP;
 
 protected:
 
