@@ -4,22 +4,21 @@
 
 #include "CoreMinimal.h"
 #include "BuffComponent.h"
-#include "SpeedBuffComponent.generated.h"
+#include "JumpBuffComponent.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class DRAGONLERN_API USpeedBuffComponent : public UBuffComponent
+class DRAGONLERN_API UJumpBuffComponent : public UBuffComponent
 {
 	GENERATED_BODY()
 public:
-	USpeedBuffComponent();
 	virtual void OnActivateEfect() override;
 	virtual void OnDeactivateEfect() override;
-	
-	void ChengeSpeed(float deltaSpeed);
+
+	void ChengeJumpHeight(float deltaSpeed);
 
 	UPROPERTY()
-	float _SpeedDelta = 5;
+	float _JumpDelta = 2;
 };

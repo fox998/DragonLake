@@ -8,22 +8,19 @@
 #include "DralonLernActorComponent.h"
 #include "SpeedBuffComponent.h"
 #include "DecreaseSpeedBuffComponent.h"
+#include "JumpBuffComponent.h"
 
 
-template<typename SpeedBuffComponent = USpeedBuffComponent>
-struct SpeedEfect : public PickableEfectBase
+template<typename BuffComponent>
+struct BuffEfect : public PickableEfectBase
 {
 	void ApplyEfect(OverlapParams const& prams) override
 	{
-		SpeedBuffComponent* component = prams.OtherActor->FindComponentByClass<SpeedBuffComponent>();
+		BuffComponent* component = prams.OtherActor->FindComponentByClass<BuffComponent>();
 
-		if (component)
+		if (!component)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 0.5f, FColor::Blue, FString::Printf(TEXT("HealEfect FindComponentByClass<UDralonLernActorComponent>")));
-		}
-		else
-		{
-			component = NewObject<SpeedBuffComponent>(prams.OtherActor, SpeedBuffComponent::StaticClass());
+			component = NewObject<BuffComponent>(prams.OtherActor, BuffComponent::StaticClass());
 			component->RegisterComponent();
 			prams.OtherActor->AddOwnedComponent(component);
 		}
@@ -71,8 +68,9 @@ PickableEfectBase* getEfectFromEnum(ItemEfectType efectType)
 	static const std::unordered_map<ItemEfectType, std::function<PickableEfectBase* (void)>> mapper = {
 		{ItemEfectType::Heal, newItem<HealEfect>},
 		{ItemEfectType::Damage, newItem<DamageEfect>},
-		{ItemEfectType::IncreaseSpeed, newItem<SpeedEfect<USpeedBuffComponent>>},
-		{ItemEfectType::DecreaseSpeed, newItem<SpeedEfect<UDecreaseSpeedBuffComponent>>}
+		{ItemEfectType::IncreaseSpeed, newItem<BuffEfect<USpeedBuffComponent>>},
+		{ItemEfectType::DecreaseSpeed, newItem<BuffEfect<UDecreaseSpeedBuffComponent>>},
+		{ItemEfectType::Jump, newItem<BuffEfect<UJumpBuffComponent>>}
 	};
 
 	auto efectIter = mapper.find(efectType);
@@ -86,7 +84,8 @@ FColor getColorFromEfectType(ItemEfectType efect)
 		{ItemEfectType::Heal, FColor::Green},
 		{ItemEfectType::Damage, FColor::Red},
 		{ItemEfectType::IncreaseSpeed, FColor::Blue},
-		{ItemEfectType::DecreaseSpeed, FColor::Yellow}
+		{ItemEfectType::DecreaseSpeed, FColor::Yellow},
+		{ItemEfectType::Jump, FColor::Purple}
 	};
 
 	auto colorIter = colorMapper.find(efect);
@@ -102,7 +101,7 @@ void UPickableItemBuilder::AsamblePickableItem(APickableItem* asablingBase, Item
 
 ItemEfectType UPickableItemBuilder::GetRandomEfect()
 {
-	return ItemEfectType::DecreaseSpeed;// static_cast<ItemEfectType>(FMath::RandRange(0, (int32)ItemEfectType::COUNT - 1));
+	return ItemEfectType::Jump;// static_cast<ItemEfectType>(FMath::RandRange(0, (int32)ItemEfectType::COUNT - 1));
 }
 
 

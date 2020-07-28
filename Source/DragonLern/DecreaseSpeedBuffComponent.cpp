@@ -5,5 +5,5 @@
 
 UDecreaseSpeedBuffComponent::UDecreaseSpeedBuffComponent()
 {
-	_SpeedDelta = 0.2;
+	_SpeedDelta = 1.f / _SpeedDelta;
 }

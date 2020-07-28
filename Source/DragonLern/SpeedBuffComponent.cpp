@@ -8,7 +8,6 @@
 USpeedBuffComponent::USpeedBuffComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
-	_SpeedDelta = 5;
 }
 
 void USpeedBuffComponent::OnActivateEfect()

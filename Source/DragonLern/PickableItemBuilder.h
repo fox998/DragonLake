@@ -15,6 +15,7 @@ enum ItemEfectType
 	Damage,
 	IncreaseSpeed,
 	DecreaseSpeed,
+	Jump,
 	COUNT
 };
 
