@@ -23,7 +23,16 @@ struct OverlapParams
 
 struct PickableEfectBase
 {
+	using EfectTypeT = uint32_t;
+
 	virtual void ApplyEfect(OverlapParams const&) {};
+
+	PickableEfectBase() : _efectType(-1) {}
+	PickableEfectBase(EfectTypeT efectType) : _efectType(efectType) {}
+
+	EfectTypeT GetEfectType() const { return _efectType; }
+protected:
+	EfectTypeT const _efectType;
 };
 
 
@@ -60,6 +69,8 @@ public:
 	void SetLifetime(float time) { _lifeTime = time; }
 	void SetEfect(EfectContainer newEfect) { _itemEfect = std::move(newEfect); }
 	void SetColor(FColor newColor);
+
+	EfectContainer const& GetEfect() { return _itemEfect; }
 
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* _meshComponent;

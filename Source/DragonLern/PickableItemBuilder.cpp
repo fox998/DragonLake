@@ -10,10 +10,14 @@
 #include "DecreaseSpeedBuffComponent.h"
 #include "JumpBuffComponent.h"
 
+#define EFECT_DEFOLT_CONSTRUCTOR( EFECT_CLAS, ITEM_EFECT_ENUM ) \
+	EFECT_CLAS() : PickableEfectBase( static_cast<PickableEfectBase::EfectTypeT>(ITEM_EFECT_ENUM)) {}
 
-template<typename BuffComponent>
+template<typename BuffComponent, ItemEfectType efectType>
 struct BuffEfect : public PickableEfectBase
 {
+	EFECT_DEFOLT_CONSTRUCTOR(BuffEfect, efectType)
+
 	void ApplyEfect(OverlapParams const& prams) override
 	{
 		BuffComponent* component = prams.OtherActor->FindComponentByClass<BuffComponent>();
@@ -32,16 +36,14 @@ struct BuffEfect : public PickableEfectBase
 
 struct HealEfect : public PickableEfectBase
 {
+	EFECT_DEFOLT_CONSTRUCTOR(HealEfect, ItemEfectType::Heal)
+
 	void ApplyEfect(OverlapParams const& prams) override
 	{
 		 auto* character = Cast<ADragonLernCharacter>(prams.OtherActor);
-		 character->HPDeltaChange(UPickableItemBuilder::GetInstance().HealEfect);
-		 
-		 auto* component = character->FindComponentByClass<UDralonLernActorComponent>();
-
-		 if (component)
+		 if (character)
 		 {
-			 GEngine->AddOnScreenDebugMessage(-1, 0.5f, FColor::Blue, FString::Printf(TEXT("HealEfect FindComponentByClass<UDralonLernActorComponent>")));
+			 character->HPDeltaChange(UPickableItemBuilder::GetInstance().HealEfect);
 		 }
 	}
 };
@@ -49,6 +51,8 @@ struct HealEfect : public PickableEfectBase
 
 struct DamageEfect : public PickableEfectBase
 {
+	EFECT_DEFOLT_CONSTRUCTOR(DamageEfect, ItemEfectType::Damage)
+
 	void ApplyEfect(OverlapParams const& prams) override
 	{
 		auto* character = Cast<ADragonLernCharacter>(prams.OtherActor);
@@ -68,9 +72,9 @@ PickableEfectBase* getEfectFromEnum(ItemEfectType efectType)
 	static const std::unordered_map<ItemEfectType, std::function<PickableEfectBase* (void)>> mapper = {
 		{ItemEfectType::Heal, newItem<HealEfect>},
 		{ItemEfectType::Damage, newItem<DamageEfect>},
-		{ItemEfectType::IncreaseSpeed, newItem<BuffEfect<USpeedBuffComponent>>},
-		{ItemEfectType::DecreaseSpeed, newItem<BuffEfect<UDecreaseSpeedBuffComponent>>},
-		{ItemEfectType::Jump, newItem<BuffEfect<UJumpBuffComponent>>}
+		{ItemEfectType::IncreaseSpeed, newItem<BuffEfect<USpeedBuffComponent, ItemEfectType::IncreaseSpeed>> },
+		{ItemEfectType::DecreaseSpeed, newItem<BuffEfect<UDecreaseSpeedBuffComponent, ItemEfectType::DecreaseSpeed>> },
+		{ItemEfectType::Jump, newItem<BuffEfect<UJumpBuffComponent, ItemEfectType::Jump>>}
 	};
 
 	auto efectIter = mapper.find(efectType);
@@ -101,7 +105,7 @@ void UPickableItemBuilder::AsamblePickableItem(APickableItem* asablingBase, Item
 
 ItemEfectType UPickableItemBuilder::GetRandomEfect()
 {
-	return ItemEfectType::Jump;// static_cast<ItemEfectType>(FMath::RandRange(0, (int32)ItemEfectType::COUNT - 1));
+	return ItemEfectType::Heal;// static_cast<ItemEfectType>(FMath::RandRange(0, (int32)ItemEfectType::COUNT - 1));
 }
 
 

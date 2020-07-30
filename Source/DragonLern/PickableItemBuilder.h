@@ -9,7 +9,7 @@
 
 
 UENUM()
-enum ItemEfectType
+enum class ItemEfectType
 {
 	Heal,
 	Damage,

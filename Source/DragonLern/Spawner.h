@@ -31,16 +31,16 @@ public:
 	UBoxComponent* _box;
 
 	UPROPERTY(EditAnywhere)
-	int32 _itemSpawnDelta = 2;
+	int32 _itemSpawnDelta = 1;
 
 	UPROPERTY(EditAnywhere)
-	int32 _itemMaxNumber = 2;
+	int32 _itemMaxNumber = 5;
 
 	UPROPERTY(EditAnywhere)
-	int32 _itemMinDistance = 500;
+	int32 _itemMinDistance = 1000;
 
 	UPROPERTY(EditAnywhere)
-	int32 _itemLifeTime = 2;
+	int32 _itemLifeTime = 5;
 
 private:
 	UPROPERTY()
