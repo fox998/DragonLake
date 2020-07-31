@@ -4,6 +4,7 @@
 #include "DragonLernCharacter.h"
 #include "UObject/ConstructorHelpers.h"
 #include "MyPlayerState.h"
+#include "SwichingPlayerController.h"
 
 ADragonLernGameMode::ADragonLernGameMode()
 {
@@ -14,4 +15,6 @@ ADragonLernGameMode::ADragonLernGameMode()
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
 	//MyPlayerState: No file on disk
+
+	PlayerControllerClass = ASwichingPlayerController::StaticClass();
 }
