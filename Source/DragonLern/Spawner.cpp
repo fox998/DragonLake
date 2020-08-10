@@ -3,6 +3,7 @@
 
 #include "Spawner.h"
 #include "PickableItemBuilder.h"
+#include "PeckableCounterComponent.h"
 
 
 // Sets default values
@@ -23,6 +24,7 @@ void ASpawner::BeginPlay()
 	for (auto& item : _items)
 	{
 		item = GWorld->SpawnActor<APickableItem>(GetActorLocation(), {});
+		item->_sphereComponent->OnComponentBeginOverlap.AddDynamic(this, &ASpawner::OnBeginOverlapWithCharacter);
 	}
 
 }
@@ -65,6 +67,21 @@ void ASpawner::Tick(float DeltaTime)
 		hiddenItem->SetActorLocation(getItemLocation());
 		
 		//GEngine->AddOnScreenDebugMessage(-1, 0.5f, FColor::Blue, FString::Printf(TEXT("ASpawner::Tick")));
+	}
+}
+
+void ASpawner::OnBeginOverlapWithCharacter(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	auto* counterComponent = OtherActor->FindComponentByClass<UPeckableCounterComponent>();
+
+	if (!counterComponent)
+	{
+		counterComponent = NewObject<UPeckableCounterComponent>(OtherActor, UPeckableCounterComponent::StaticClass());
+		counterComponent->RegisterComponent();
+		OtherActor->AddOwnedComponent(counterComponent);
+		
+		auto const* const pickable = Cast<APickableItem>(OverlappedComponent->GetOwner());
+		counterComponent->ProcessOverlapWithPeckable(pickable);
 	}
 }
 

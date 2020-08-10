@@ -18,6 +18,7 @@ APushActor::APushActor()
 	_meshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	_meshComponent->SetStaticMesh(MeshRef.Object);
 	
+	
 	_sphere = CreateDefaultSubobject<USphereComponent>(TEXT("RootComponent"));
 	_sphere->OnComponentBeginOverlap.AddDynamic(this, &APushActor::OnActorBeginOverlap);
 	_sphere->SetSphereRadius(100);

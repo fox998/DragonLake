@@ -69,8 +69,9 @@ public:
 	void SetLifetime(float time) { _lifeTime = time; }
 	void SetEfect(EfectContainer newEfect) { _itemEfect = std::move(newEfect); }
 	void SetColor(FColor newColor);
+	FColor GetColor() const;
 
-	EfectContainer const& GetEfect() { return _itemEfect; }
+	EfectContainer const& GetEfect() const { return _itemEfect; }
 
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* _meshComponent;

@@ -34,6 +34,13 @@ void APickableItem::SetColor(FColor newColor)
 	_dynamicMaterial->SetVectorParameterValue(TEXT("Base Color"), newColor );
 }
 
+FColor APickableItem::GetColor() const
+{
+	FLinearColor textureColor;
+	_dynamicMaterial->GetVectorParameterValue(TEXT("Base Color"), textureColor);
+	return textureColor.ToFColor(true);
+}
+
 void APickableItem::OnBeginOverlap(
 	UPrimitiveComponent* OverlappedComponent,
 	AActor* OtherActor,

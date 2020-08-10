@@ -105,7 +105,7 @@ void UPickableItemBuilder::AsamblePickableItem(APickableItem* asablingBase, Item
 
 ItemEfectType UPickableItemBuilder::GetRandomEfect()
 {
-	return ItemEfectType::Heal;// static_cast<ItemEfectType>(FMath::RandRange(0, (int32)ItemEfectType::COUNT - 1));
+	return static_cast<ItemEfectType>(FMath::RandRange(0, (int32)ItemEfectType::COUNT - 1));
 }
 
 
